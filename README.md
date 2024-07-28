@@ -6,7 +6,7 @@ Manga Downloader is a web application that allows users to download manga from p
 
 ## Features
 
-- **Download Manga from Multiple Sources**: Supports MangaDex and other popular manga sites.
+- **Download Manga from Multiple Sources**: Supports MangaDex and other popular manga sites.(Currently Only MangaDex)
 - **User-Friendly Interface**: Simple and intuitive web interface.
 - **Customizable Download Folder**: Choose where you want your manga to be saved.
 - **Dockerized**: Easy to deploy and run anywhere with Docker.
