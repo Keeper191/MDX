@@ -1,0 +1,6 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+mangadex-downloader
+flask-socketio
+eventlet

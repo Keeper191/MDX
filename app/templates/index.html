@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manga Downloader</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('new_job', (data) => {
+            addProgressTracker(data.job_id, data.status);
+        });
+
+        socket.on('update_status', (data) => {
+            document.getElementById(`status-${data.job_id}`).innerText = data.status;
+        });
+
+        function addProgressTracker(jobId, status) {
+            const progressContainer = document.getElementById('progress-list');
+            const progressItem = document.createElement('div');
+            progressItem.innerHTML = `Job ID: ${jobId} - Status: <span id="status-${jobId}">${status}</span>`;
+            progressContainer.appendChild(progressItem);
+        }
+
+        document.querySelector('form').addEventListener('submit', function (event) {
+            const jobId = `${Date.now()}`;
+            addProgressTracker(jobId, 'Pending');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Manga Downloader</h1>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger mb-3">Logout</a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert alert-warning" role="alert">
+                {% for category, message in messages %}
+                    <strong>{{ category }}!</strong> {{ message }}<br>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <form method="post">
+            <div class="form-group">
+                <label for="manga_url">MangaDex URL:</label>
+                <input type="text" class="form-control" id="manga_url" name="manga_url" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Download</button>
+        </form>
+        <div id="progress-container" class="mt-3">
+            <h2>Download Progress</h2>
+            <div id="progress-list"></div>
+        </div>
+    </div>
+</body>
+</html>
